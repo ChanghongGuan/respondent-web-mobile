@@ -1,18 +1,18 @@
 import Request from '../js_sdk/luch-request/luch-request/index.js'
 // 服务器后端的一个接口地址
-// const BASE_API = "http://respondent.top:8081"
+const BASE_API = "http://online.respondent.top:9001/respondent2"
 // 本地后端接口的一个地址
-const BASE_API = "http://localhost:8081"
+// const BASE_API = "http://localhost:8081"
 
 
 // 创建一个统一的请求实例对象
 const http = new Request({
 	baseURL: BASE_API, //设置请求的base url
-	timeout: 10000, //超时时长 10s
+	timeout: 5000, //超时时长 
 })
 
 //请求拦截器
-http.interceptors.request.use((config) => { 
+http.interceptors.request.use((config) => {
 	const token = uni.getStorageSync('token');
 	// 如果说本地存放有token数据的话,则携带token进行一个请求操作
 	if (token) {
@@ -40,7 +40,7 @@ http.interceptors.response.use((response) => {
 		// 统一将错误信息反馈给用户
 		uni.showToast({
 			title: data.msg,
-			icon:"none",
+			icon: "none",
 			duration: 1500
 		});
 		// 调用这个错误的方法 让页面接口调用可以感知到

@@ -9,7 +9,7 @@
 			</u-form-item>
 		</u-form>
 
-		<u-button @click="login()" type="success">登录</u-button>
+		<u-button @click="login" type="success">登录</u-button>
 	</view>
 </template>
 
@@ -21,13 +21,12 @@
 			return {
 				title: 'Hello',
 				user: {
-					name: "",
-					password: ""
+					name: "testUser",
+					password: "1"
 				}
 			}
 		},
 		onLoad() {
-
 		},
 		methods: {
 			// 执行登录操作

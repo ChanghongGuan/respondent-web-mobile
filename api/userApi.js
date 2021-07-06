@@ -1,31 +1,31 @@
-import http from "@/api/request.js"
 import auth from '@/api/auth.js'
+import request from '@/api/request'
+import md5 from '@/js_sdk/js-md5/build/md5.min.js'
 
-const BASE_URL = "/competition/user"
+const BASE_URL = "/user";
 
 export default {
-	// 用户登录   修改为同步的一种方式
 	login(user) {
-		// 这样的一个返回形式的话,如果说界面调用的地方,还需要处理一个错误的方式的话,后面可以使用.catch() 进行处理错误代码
-		return http.post(`${BASE_URL}/login`, user).then(response => {
-			console.log(response.data)
-			// 将成功登录后的token信息进行一个保存
-			auth.setToken(response.data)
-			uni.showToast({
-				icon:"none",
-				duration:1000,
-				title: "登录成功!"
-			});
-			// 登录成功后,获取用户的一个基本信息
-			/* this.getUserInfo().then(response => {
-				auth.setUserInfo(response.data)
-			}) */
+		// 对用户的密码进行加密
+		user.password = md5(user.password)
+		return request.post(`${BASE_URL}`, user).then(res => {
+			// 如果登录成功,返回的这个信息不为null,则将登录的用户信息保存进cookie中
+			if (res.data) {
+				uni.showToast({
+					title: "登录成功!"
+				});
+				auth.setToken(res.data)
+				// 将已经登录的userInfo信息保存进cookie中
+				this.getInfo().then(response => {
+					auth.setUserInfo(response.data)
+				})
+				uni.navigateTo({
+					url:'/pages/type/type'
+				})
+			}
 		})
 	},
-	// 退出登录
-	logout() {
-		// 如果存放有用户信息的话,则去除相关的用户信息
-		// auth.removeUserInfo();
-		auth.removeToken();
+	getInfo() {
+		return request.get(`${BASE_URL}/info`)
 	}
 }

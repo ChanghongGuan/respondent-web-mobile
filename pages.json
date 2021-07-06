@@ -9,7 +9,25 @@
 				"navigationBarTitleText": "首页"
 			}
 		}
-	],
+	    ,{
+            "path" : "pages/type/type",
+            "style" :                                                                                    
+            {
+                "navigationStyle":"custom",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/word/word",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "单词",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uView",

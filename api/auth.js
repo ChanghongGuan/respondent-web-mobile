@@ -16,7 +16,6 @@ export default {
 	removeToken() {
 		uni.removeStorageSync(token)
 	},
-
 	// 设置用户的基本信息
 	setUserInfo(userInfovo) {
 		uni.setStorageSync(userInfo, userInfovo)

@@ -4,14 +4,12 @@
 			<u-search placeholder="请输入英文单词" v-model="query.word" @search="search"></u-search>
 		</view>
 
-		<view class="sort">
-			<view @click="serviceSort({order:'ascending',prop:'count'})">答题次数</view>
-			<view @click="serviceSort({order:'ascending',prop:'ecount'})">错误次数</view>
-			<view @click="serviceSort({order:'ascending',prop:'gmtCreate'})">创建日期</view>
-		</view>
+		<view class="result-bar">查询结果:{{ page.total }}条</view>
+
+		<sort-bar :sortParams="sortParams" :onChange="serviceSort"></sort-bar>
 
 		<view class="content">
-			<word-card v-for="item in records" :word="item" :highContent="query.word"></word-card>
+			<word-card v-for="item in records" :word="item" :highContent="query.word" :key="item.id"></word-card>
 		</view>
 		<u-loadmore style="margin-bottom: 50px;" :status="status" :load-text="loadText" @loadmore="listLoadmore" />
 
@@ -23,10 +21,12 @@
 <script>
 	import wordApi from '../../api/wordApi.js'
 	import WordCard from '@/components/WordCard.vue'
+	import sortBar from '@/components/sortBar.vue'
 
 	export default {
 		components: {
-			WordCard: WordCard
+			WordCard: WordCard,
+			sortBar: sortBar
 		},
 		data() {
 			return {
@@ -74,16 +74,24 @@
 				loadLock: 0,
 				// 最近查询的一个分页对象
 				page: {},
+				// 传递给排序子组件的参数
+				sortParams: [{
+					label: "答题次数",
+					value: "count"
+				}, {
+					label: "错误次数",
+					value: "ecount"
+				}, {
+					label: "创建日期",
+					value: "gmtCreate"
+				}]
 			}
 		},
 		onLoad(option) {
+			this.records = []
 			if (option.typeId) {
-				console.log("接收到的参数id为:" + option.typeId)
-
 				// 进行数据的初始化加载
 				this.query.wordTypeId = option.typeId
-
-				this.records = []
 				this.getData()
 			}
 		},
@@ -93,10 +101,13 @@
 				if (this.isEnd && this.current > 1) {
 					// 如果已经加载到了最后一页,则不继续向下加载了
 					// 之所以要判断current>1 是为了防止条件搜索失效
-
 					// 加个3s中的锁,防止疯狂弹出
 					if (new Date().getTime() - this.loadLock > 3000) {
-						this.$message("没有更多数据了!")
+						uni.showToast({
+							title: "没有更多数据了!",
+							icon: "none",
+							duration: 1500
+						});
 						this.loadLock = new Date().getTime()
 					}
 					return
@@ -105,12 +116,9 @@
 				wordApi.list(this.query, this.current, this.size).then(res => {
 					//将查询结果push进去
 					this.records.push(...res.data.records)
-
 					// 以此判断是否已经到了最后一页
 					this.isEnd = res.data.current >= res.data.pages
-
 					this.page = res.data
-
 					this.loading = false
 				})
 			},
@@ -133,19 +141,15 @@
 				// 对这三个参数进行后端请求排序
 
 				// 将el-table中的排序字符转化为后端所识别的排序字符
-				let sortSymbol = obj.order ? obj.order === 'ascending' : undefined
-
-				console.log("排列顺序为:" + sortSymbol)
+				let sortSymbol = obj.order ? obj.order === 'asc' : undefined
 
 				// 为了增加用户的一个体验,排序时只允许同时一个参数进行排序 这里就先进行所有排序参数的清空
 				this.query.countSort = undefined
 				this.query.errorCountSort = undefined
 				this.query.dateSort = undefined
 
-				console.log("进行排序的参数为:"+obj.prop)
-
 				// 对这三个参数进行数据处理
-				switch (obj.prop) {
+				switch (obj.value) {
 					case 'count':
 						this.query.countSort = sortSymbol
 						break
@@ -174,10 +178,11 @@
 		align-items: center;
 	}
 
-	.sort {
+	.result-bar {
 		width: 100%;
-		display: flex;
-		justify-content: space-around;
-		margin: 2px 0;
+		text-align: center;
+		margin: 1px 0;
+		font-size: small;
+		color: #909399;
 	}
 </style>

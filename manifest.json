@@ -81,10 +81,10 @@
         "template" : "template.h5.html",
         "router" : {
             "mode" : "hash",
-            "base" : "/h5/"
+            "base" : "/resp/"
         },
-        "title" : "竞赛",
-        "domain" : "localhost",
+        "title" : "记单词-移动版",
+        "domain" : "online.respondent.top",
         "devServer" : {
             "https" : false,
             "port" : 80

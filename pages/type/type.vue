@@ -39,11 +39,6 @@
 			},
 			// 页面跳转
 			linkTo(link) {
-				console.log("执行跳转,路径为:" + link)
-			/* 	uni.navigateTo({
-					url: link
-				}) */
-
 				uni.navigateTo({
 					url: link
 				})
@@ -66,15 +61,11 @@
 
 	.card {
 		width: 80%;
-		background-color: #19BE6B;
+		background-color: #2B85E4;
 		margin: 5px 0;
 		padding: 10px;
 		font-size: large;
 		border-radius: 8px;
-	}
-
-	.card:hover {
-		background-color: #2B85E4;
 	}
 
 	.title {

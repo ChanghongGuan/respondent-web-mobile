@@ -4,16 +4,16 @@
 		<view class="header">
 			<view></view>
 			<view class="word" @click="jump()" v-html="targetContent"></view>
-			<view  @click="playAudio()">
-				<u-image width="50rpx" height="50rpx" mode="aspectFit"
-					src="/static/voice.png">
+			<view @click="playAudio()">
+				<u-image width="50rpx" height="50rpx" mode="aspectFit" src="/static/voice.png">
 				</u-image>
 			</view>
 		</view>
 
 		<text class="mean">{{word.mean}}</text>
 		<view class="notes" v-if="word.notes">备注信息:{{word.notes}}</view>
-		<u-image width="100%" height="300rpx" v-if="word.image" :src="word.image"></u-image>
+		<u-image width="100%" height="300rpx" v-if="word.image" :src="word.image" @click="preview(word.image)">
+		</u-image>
 		<view class="date">{{word.gmtCreate | date("mm-dd hh:ss")}}</view>
 		<view class="count">答题次数:{{word.count}},错题次数:{{word.ecount}}</view>
 		<!-- 音频播放audio -->
@@ -63,6 +63,19 @@
 				innerAudioContext.onPlay(() => {
 					// console.log('开始播放');
 				});
+			},
+			// 预览图片
+			preview(imgUrl) {
+				uni.previewImage({
+					current: 0,
+					urls: [imgUrl],
+					fail(err) {
+						this.$refs.uToast.show({
+							title: "预览图片失败!",
+							type: 'error'
+						})
+					}
+				})
 			}
 		},
 		created() {
@@ -90,8 +103,8 @@
 		padding: 8px;
 		margin: 5px 0;
 	}
-	
-	.header{
+
+	.header {
 		width: 100%;
 		display: flex;
 		justify-content: space-between;
@@ -116,5 +129,4 @@
 		width: 100%;
 		text-align: center;
 	}
-
 </style>

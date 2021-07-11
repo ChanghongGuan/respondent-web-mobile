@@ -81,13 +81,13 @@
         "template" : "template.h5.html",
         "router" : {
             "mode" : "hash",
-            "base" : "/resp/"
+            "base" : "/mobile/"
         },
         "title" : "记单词-移动版",
-        "domain" : "online.respondent.top",
+        "domain" : "respondent.top",
         "devServer" : {
             "https" : false,
-            "port" : 80
+            "port" : 8080
         }
     }
 }

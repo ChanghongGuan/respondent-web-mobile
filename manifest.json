@@ -88,6 +88,9 @@
         "devServer" : {
             "https" : false,
             "port" : 8080
+        },
+        "sdkConfigs" : {
+            "maps" : {}
         }
     }
 }

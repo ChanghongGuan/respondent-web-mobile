@@ -13,20 +13,4 @@
 ## 后端说明
 > 现后端代码并没有开源,主要原因是因为后端代码涉及到多个服务之间的调用,有相关的账号密码没有脱离出来.不过我将后端的API文档给公开出来了,如果是在本地(localhost)的80或3000端口部署的前端项目是可以正常调用我的后端API的.
 
-## Build Setup
-
-```bash
-# install dependencies
-$ npm install
-
-# serve with hot reload at localhost:3000
-$ npm run dev
-
-# build for production and launch server
-$ npm run build
-$ npm run start
-
-# generate static project
-$ npm run generate
-```
 
